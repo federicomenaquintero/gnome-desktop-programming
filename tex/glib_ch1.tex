@@ -1,7 +1,88 @@
 \chapter{What is GLib?}
 
 \begin{itemize}
-\item What is GLib.
-\item Where did GLib come from.
+\item What is GLib?
+\item Where did GLib come from?
 \item How to compile and link against GLib.
 \end{itemize}
+
+\section{What is GLib?}
+
+GLib is a library that essentially turns C into a higher-level
+language.  Many such libraries have been written, but GLib is popular
+because it is the foundation for GTK+ and the various desktop
+environments.  It has turned from being a small collection of
+utilities useful for C programming, to being a library that you can't
+live without if you program in C.
+
+\section{Where did GLib come from?}
+
+In 1996, the first versions of the GNU Image Manipulation Program (the
+GIMP) used Motif, a proprietary widget toolkit for Unix.  The GIMP's
+authors understood that this was an inconvenient situation, because it
+meant that although the GIMP itself was released under a free software
+license, the GPL, people could in effect not recompile the GIMP if
+they didn't have a Motif license.
+
+At that time, there were a few free widget toolkits available for
+Unix, but none seemed to be complete enough for the GIMP and its heavy
+graphical requirements.  So, the GIMP's authors took a break to write
+their own widget toolkit, and then rewrite the GIMP to use it.
+
+This toolkit was GTK, the GIMP Tool Kit.  Later, GTK was updated to
+have a full object system for C and other utilities, and it was
+renamed to GTK+.  Apart from the object system and the widget toolkit,
+it included GLib, a small library of C functions and macros to make
+C programming easier and more portable.  GLib contained things like
+linked lists and hash tables, resizable arrays and strings, and other
+things that almost every program would find convenient.
+
+Initially, GTK+ was shipped as part of the GIMP's source code
+distribution.  People who wanted to write programs with GTK+ first had
+to install the GIMP.  Around the time the Gnome project started, GTK+
+got separated from the GIMP and started to be shipped as a stand-alone
+library that contained GLib as part of itself.
+
+GTK+ 2.0 in turn got split into two separate libraries:  GLib, for the
+non-graphical part and the object system, and GTK+ proper, the widget
+toolkit.  Over time, GLib has added various things:  a threading
+abstraction, an introspectible object and type system, loadable
+modules, and GIO, a full I/O library with modern features like
+asynchronous operations.
+
+GLib has grown organically, in a well-controlled way.  Many of its
+features have been ``pushed down in the stack'' of libraries from
+higher-level places, as those bits of code have matured into
+general-purpose utilities.  For example, GIO embodies the experience
+gained from writing first mc-vfs, the Midnight Commander file
+manager's virtual file system abstraction, then gnome-vfs for the
+Nautilus file manager, and finally thinking about how synchronous and
+asynchronous I/O operations need to happen in a convenient way for the
+particular needs of a multithreaded graphical program.
+
+\section{How to compile and link against GLib}
+
+Since GLib uses \verb|pkg-config|, compiling programs that use it is
+easy.  For example,
+
+\begin{code}{}
+\$ ls
+main.c
+\$ gcc -o myprogram main.c \$(pkg-config --cflags --libs glib-2.0)
+\$ ./myprogram
+Hello, GLib!
+\$
+\end{code}
+
+For pkg-config's purposes, GLib's sub-libraries are as follows:
+
+\begin{itemize}
+\item \verb|glib-2.0| -- The low-level GLib library, with data
+  structures and utilities.
+\item \verb|gmodule-2.0| -- GModule, a system of loadable modules for
+  applications that require plug-in type functionality.
+\item \verb|gobject-2.0| -- GObject, the type and object system in GLib.
+\item \verb|gio-2.0| -- GIO, an I/O library for file and network
+  operations with many features.
+\item \verb|gthread-2.0| -- Threads and thread pools.
+
